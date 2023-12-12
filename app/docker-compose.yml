@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  web:
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - /app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=blog
+      - DB_USER=adminblog
+      - DB_PASS=5525
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=blog
+      - POSTGRES_USER=adminblog
+      - POSTGRES_PASSWORD=5525
+    ports:
+      - "8001:5432"
+volumes:
+  db:
